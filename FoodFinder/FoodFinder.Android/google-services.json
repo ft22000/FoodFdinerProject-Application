@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "402945944000",
+    "firebase_url": "https://food-finder-a914f.firebaseio.com",
+    "project_id": "food-finder-a914f",
+    "storage_bucket": "food-finder-a914f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402945944000:android:d80a04c4eb20c2ab",
+        "android_client_info": {
+          "package_name": "au.edu.utas.FoodFinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "402945944000-e9hc7j0ukh6bd90tng6ah5roe0c2n9l9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8WeQ_3WTG9_mKF62Y1okLlVl-Ny4lZS0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

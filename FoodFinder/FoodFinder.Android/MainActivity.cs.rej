@@ -1,0 +1,21 @@
+diff a/FoodFinder/FoodFinder.Android/MainActivity.cs b/FoodFinder/FoodFinder.Android/MainActivity.cs	(rejected hunks)
+@@ -28,18 +28,7 @@
+             LoadApplication(new App());
+ 
+             FirebasePushNotificationManager.ProcessIntent(this, Intent);
+-            CrossCurrentActivity.Current.Init(this, bundle);
+-        }
+-
+-        /// <summary>
+-        /// Prompts users running Marshmallow for the runtime permissions required by Xam.Plugin.Media
+-        /// </summary>
+-        /// <param name="requestCode"></param>
+-        /// <param name="permissions"></param>
+-        /// <param name="grantResults"></param>
+-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
+-        {
+-            Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+         }
+     }
+ }
++

@@ -1,0 +1,5 @@
+﻿The University of Tasmania (UTAS) embeds sustainable practices within its operations and through its commitment to reduce environmental impacts, achieve economic efficiency, demonstrate social responsibility and enhance student experience.
+
+Among many other goals, the UTAS Sustainability Team aims to reduce food waste and improve food security for UTAS students. The purpose of this application is to connect event organisers with the UTAS community, particularly students. By making leftover food available to others within a safe time-frame, the amount of food waste to landfill is reduced, while food security issues are addressed.
+
+Food Finder was developed by the UTAS Project Team ‘UTAS Food Finder’ consisting of members Timothy Anderson, John Aslin, Eli den Hartog, Thomas Enniss, Justin Hood, Guang Jin, Joeby Neil and Jordan Woolley.

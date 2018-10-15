@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+ <!--This page is the basis of the hamburger menu. Here Buttons can be added to the menu, or removed.-->
+
+<!--// TA xmlns:x -> sets the Schema-->
+<!--// TA xmlns:local -> uses the root FoodFinder directory-->
+<!-- // TA x:Class="FoodFinder.MasterPage" uses the this page-->
+<!--//TA views sets the Foodfinder.Views folder as the location of the various screens-->
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="using:FoodFinder"
+                x:Class="FoodFinder.MasterPage"
+                Padding="0,0,0,0"
+                Icon="hamburger_icon.png"
+                Title="Food Finder"
+                x:Name =""
+
+             xmlns:views="using:FoodFinder.Views">
+</ContentPage>

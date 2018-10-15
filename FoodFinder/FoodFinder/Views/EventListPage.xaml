@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FoodFinder.Views.EventListPage"
+             Title="Event List">
+
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="15"/>
+            <On Platform="Android" Value="10"/>
+        </OnPlatform>
+    </ContentPage.Padding>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <!--JA: Event list
+                TE: In order to refresh events properly when you pull down, you need IsPullToRefreshEnabled = True like I had set before and also the Refreshing event needs to trigger a function which I didn't do.
+                Kim: "HasUnevenRows" allows to display additioanl information in the list view
+            -->
+
+            <Label x:Name="emptyTextLabel" 
+                   HorizontalTextAlignment="Center"
+                   FontSize="Medium"/>
+
+            <ListView x:Name="eventList" IsPullToRefreshEnabled="True" Refreshing="RefreshEvents" HasUnevenRows="True" HorizontalOptions="CenterAndExpand" Footer="">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+
+                        <ViewCell>
+                            <ViewCell.View >
+                                <Frame HasShadow="false" Margin="0,0,0,0">
+                                    <StackLayout Orientation="Horizontal">
+                                        <StackLayout HorizontalOptions="StartAndExpand"
+                                                 VerticalOptions="Center">
+                                            <Label Text="{Binding Name}" TextColor="Black"  FontSize="Medium" HorizontalOptions="StartAndExpand" HorizontalTextAlignment="Center"/>
+                                        </StackLayout>
+
+                                        <StackLayout HorizontalOptions="End"
+                                                 VerticalOptions="Center">
+                                            <Label Text="{Binding Campus.Campus_Name}" TextColor="Black"  FontSize="Medium" HorizontalOptions="End" HorizontalTextAlignment="Center"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </Frame>
+                            </ViewCell.View>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

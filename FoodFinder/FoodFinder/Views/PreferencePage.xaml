@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FoodFinder.Views.PreferencePage"
+             Title="Preferences"
+             Style="{StaticResource tabbedPageStyle}">
+
+    <!--EDH: Padding for all devices -->
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="Android" Value="15"/>
+            <On Platform="iOS" Value="0" />
+        </OnPlatform>
+    </ContentPage.Padding>
+
+    <!--Help label with gesture recogniser-->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Default" Priority="0" Icon="question.png" Clicked="ShowHideTips" />
+    </ContentPage.ToolbarItems>
+
+    <!--Kim: Account tab-->
+
+    <ContentPage Title="Account" Style="{StaticResource tabbedAccountStyle}">
+        <ContentPage.Padding>
+            <OnPlatform x:TypeArguments="Thickness">
+                <On Platform="iOS" Value="15"/>
+            </OnPlatform>
+        </ContentPage.Padding>
+        <ContentPage.Icon>
+            <OnPlatform x:TypeArguments="FileImageSource" iOS="settings.png"/>
+        </ContentPage.Icon>
+        <ContentPage.Content>
+            <StackLayout>
+                <ScrollView Style="{StaticResource scollViewMargin}">
+                    <StackLayout Orientation="Vertical"
+                         VerticalOptions="Start"
+                             HorizontalOptions="FillAndExpand"
+                             >
+        
+                        <!-- Kim: Entries for Email, Password, New Password (EDH:), and confirm new password-->
+                        <Label Text="Change Password"
+							   VerticalOptions="Start"
+							   HorizontalOptions="Center"
+							   FontSize="Medium"/>
+
+                        <Entry x:Name="email"
+							   HorizontalTextAlignment="Start"
+                               HorizontalOptions="FillAndExpand"
+							   IsEnabled="False"/>
+
+                    <StackLayout Orientation="Horizontal" Margin="0" Padding="0">
+                        <!--EDH: Password input -->
+                            <Entry x:Name="password"
+                                   Placeholder="Password*"
+                                   IsPassword="True"
+                                   HorizontalTextAlignment="Start"
+                                   HorizontalOptions="FillAndExpand"/>
+                            <!--TODO: Set Style Sheet Entry-->
+                            <Image x:Name="ShowHidePasswordLabel"
+                                   HorizontalOptions="End"
+								   VerticalOptions="Center"
+                                   Source="hide.png"
+                                   WidthRequest="20">
+                                <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ShowHidePassword"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                    </StackLayout>
+
+                        <StackLayout Orientation="Horizontal" Margin="0" Padding="0">
+                            <Entry x:Name="newPassword"
+								   Placeholder="New Password*"
+								   IsPassword="True"
+								   HorizontalTextAlignment="Start"
+								   HorizontalOptions="FillAndExpand"/>
+                            <!--TODO: Set Style Sheet Entry-->
+                            <Image x:Name="ShowHideNewPasswordLabel"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center"
+                                   WidthRequest="20"
+                                   Source="hide.png">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ShowHideNewPassword"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </StackLayout>
+
+                        <StackLayout x:Name="passwordToolTip" IsVisible="False">
+                            <Label Text="Your password needs to meet the following requirements:"
+                                   Style="{StaticResource toolTipLabel}"
+                                   IsVisible="True"/>
+                            <Label Text="&#x2022; At least 8 or more characters long."
+                                   Style="{StaticResource toolTipLabel}"
+                                   IsVisible="True"/>
+                            <Label Text="&#x2022; At least 1 must be an uppercase letter."
+                                   Style="{StaticResource toolTipLabel}"
+                                   IsVisible="True"/>
+                            <Label Text="&#x2022; At least 1 must be a lowercase letter."
+                                   Style="{StaticResource toolTipLabel}"
+                                   IsVisible="True"/>
+                            <Label Text="&#x2022; At least 1 must be a number."
+                                   Style="{StaticResource toolTipLabel}"
+                                   IsVisible="True"/>
+                        </StackLayout>
+
+                        <Entry x:Name="confirmNewPassword"
+							   Placeholder="Confirm New Password*"
+							   IsPassword="True"
+							   HorizontalTextAlignment="Start"
+                               HorizontalOptions="FillAndExpand"/>
+
+                        <!--Kim: button to update enties to the database-->
+                        <Button Clicked="UpdatePasswordButton"
+								Text="Change Password"
+                                HorizontalOptions="FillAndExpand"
+								FontSize="Small"/>
+
+                        <!--Request permissions button-->
+                        <Button  x:Name="OrganiserRequestButton"
+                                 Clicked="BecomeEventOrganiser"
+                                 Text="Become an Event Organiser"/>
+
+                        <!--Kim: Toggles for the notification type -->
+                        <Label Text="Notification Type"
+							   VerticalOptions="Center"
+                               HorizontalOptions="Center"/>
+
+                        <StackLayout Orientation="Horizontal">
+                            <Label x:Name="pushNotificationSwitch"
+								   Text="Push Notifications"
+								   HorizontalOptions="StartAndExpand"
+								   VerticalOptions="Center"/>
+
+                            <!--EDH: toggle for push notifications -->
+                            <Switch x:Name="pushToggle"
+									HorizontalOptions="EndAndExpand"
+									VerticalOptions="Center"
+									Toggled="OnToggledNotification"/>
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Email Notifications"
+								   HorizontalOptions="Start"
+								   VerticalOptions="Center"/>
+
+                            <!--EDH: toggle for email notifications -->
+                            <Switch x:Name="emailToggle"
+									HorizontalOptions="EndAndExpand"
+									VerticalOptions="Center"
+									Toggled="OnToggledNotification"/>
+                        </StackLayout>
+
+                        <!-- JW: loading spinner; keep this as the last element until I sort out overlaying it over the other elements -->
+                    <ActivityIndicator x:Name="loadingSpinnerAccount" IsRunning="false" />
+                    </StackLayout>
+            </ScrollView>
+            </StackLayout>
+        </ContentPage.Content>
+    </ContentPage>
+
+    <!--Kim: Location tab-->
+    <ContentPage Title="Location" Style="{StaticResource locationIconSetter}">
+        <ContentPage.Padding>
+            <OnPlatform x:TypeArguments="Thickness">
+                <On Platform="iOS" Value="15"/>
+            </OnPlatform>
+        </ContentPage.Padding>
+        <ContentPage.Icon>
+            <OnPlatform x:TypeArguments="FileImageSource" iOS="define_location.png"/>
+        </ContentPage.Icon>
+        <ContentPage.Content>
+            <StackLayout Orientation="Vertical"
+                             VerticalOptions="Start"
+                         HorizontalOptions="FillAndExpand">
+                <StackLayout x:Name="InitialView" IsVisible="True">
+                    <StackLayout>
+                        <Label x:Name="primaryCampusName"
+                               Text="Primary Campus"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               FontSize="Medium"/>
+
+                <!--Kim: Pickers allow users to select campus-->
+                <Picker x:Name="primaryCampus"
+                        Title="Select Campus"
+                        HeightRequest="50"
+                                HorizontalOptions="FillAndExpand"
+                                ItemDisplayBinding="{Binding Campus_Name}"/>
+
+                        <Label x:Name="primaryCampusToolTip"
+                               Text="Your primary campus is where your map position will default to, and receive notifications from."
+                               Style="{StaticResource toolTipLabel}"
+                               Margin="0,0,5,0"/>
+
+                        
+
+                        <!--JW: Button to open campus picker custom popup-->
+                        <Button x:Name="campusSelectButton"
+                                Clicked="CampusSelection"
+                                Text="Secondary Campus Selection"
+                                HorizontalOptions="FillAndExpand"/>
+
+                        <Label x:Name="subscribedCampusToolTip"
+                               Text="Your secondary campuses are the locations that you will recieve event notifications from."
+                               Style="{StaticResource toolTipLabel}"/>
+                    </StackLayout>
+                </StackLayout>
+
+                <StackLayout x:Name="SecondaryCampusPicker" IsVisible="False">
+                    <!--EDH & JW Custom popup for selecting secondary campuses -->
+                    <Label HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           LineBreakMode="CharacterWrap"
+                           Text="Secondary Campus Selection&#x0a;"
+                           x:Name="campusSelectionLabel"
+                           FontSize="Medium"/>
+
+                    <ListView x:Name="secondaryCampuses">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal">
+                                        <StackLayout HorizontalOptions="StartAndExpand"
+                                                     VerticalOptions="Center">
+                                            <Label  x:Name="campusName"
+                                                                Text="{Binding ListCampusName}"/>
+                                        </StackLayout>
+
+                                        <StackLayout HorizontalOptions="End"
+                                                     VerticalOptions="Center">
+                                            <Switch x:Name="campusSwitch"
+                                                        Toggled="OnToggledCampus"
+                                                        IsToggled="{Binding ListSwitchState}"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <StackLayout VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+                        <Button x:Name="campusConfirmButton"
+                                Text="Save"
+                                HorizontalOptions="FillAndExpand"
+                                Clicked="CloseCampusSelection"/>
+                    </StackLayout>
+                </StackLayout>
+
+                <!-- JW: loading spinner; keep this as the last element until I sort out overlaying it over the other elements -->
+                <ActivityIndicator x:Name="loadingSpinnerLocation" IsRunning="false" />
+            </StackLayout>
+        </ContentPage.Content>
+    </ContentPage>
+</TabbedPage>

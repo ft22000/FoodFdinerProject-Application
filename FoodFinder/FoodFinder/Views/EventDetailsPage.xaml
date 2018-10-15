@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions"
+             x:Class="FoodFinder.Views.EventDetailsPage"
+             Title="Event Details">
+
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="10"/>
+            <On Platform="Android" Value="15"/>
+        </OnPlatform>
+    </ContentPage.Padding>
+
+    <!--Help label with gesture recogniser-->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Default" Priority="0" Icon="question.png" Clicked="ShowHideTips" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <ScrollView Style="{StaticResource scollViewMargin}">
+                <StackLayout>
+
+                    <StackLayout Orientation="Horizontal">
+						<Label x:Name="detailsCutleryTooltip"
+                                       Text="As a reminder to all attendees, please do not take any crockery and/or cutlery that is present. This gets washed and reused."
+                                       Style="{StaticResource toolTipLabel}"
+                                       HorizontalOptions="Start"/>
+					</StackLayout>
+
+					<StackLayout Orientation="Horizontal">
+
+
+						
+                        <!--Left stack-->
+                        <StackLayout HorizontalOptions="Start" MinimumWidthRequest="70">
+							
+
+							
+							<!--JA: Event name-->
+                            <Label Text="Event Name"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="CenterAndExpand"
+                                   FontSize="Medium"
+                                   Margin="0,5,0,5"/>
+
+                            <!--JA: Campus-->
+                            <Label Text="Campus"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="CenterAndExpand"
+                                   FontSize="Medium"
+                                   Margin="0,5,0,5"/>
+
+                            <!--JA: Room-->
+                            <Label Text="Room/Building"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="CenterAndExpand"
+                                   FontSize="Medium"
+                                   Margin="0,5,0,5"/>
+
+                            <!--JA: Remaining time-->
+                            <Label Text="Remaining Time"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="CenterAndExpand"
+                                   FontSize="Medium"
+                                   Margin="0,5,0,5"/>
+                        </StackLayout>
+
+                        <!--Right stack-->
+                        <StackLayout HorizontalOptions="FillAndExpand">
+                            <!--JA: Event name-->
+                            <Label x:Name="name"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="CenterAndExpand"
+                                   Text="{Binding Name}"
+                                   FontSize="Medium"
+                                   TextColor="Black"
+                                   Margin="0,5,0,5"/>
+
+                            <!--JA: Campus-->
+                            <Label x:Name="campus"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="CenterAndExpand"
+                                   FontSize="Medium"
+                                   TextColor="Black"
+                                   Margin="0,5,0,5"/>
+
+                            <!--JA: Room-->
+                            <Label x:Name="location"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="CenterAndExpand"
+                                   Text="{Binding Location}"
+                                   FontSize="Medium"
+                                   TextColor="Black"
+                                   Margin="0,5,0,5"/>
+
+                            <!--JA: Remaining time-->
+                            <Label x:Name="remainingTime"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="CenterAndExpand"
+                                   FontSize="Medium"
+                                   TextColor="Black"
+                                   Margin="0,5,0,5"/>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <StackLayout>
+                        <!--TE: Opens the event editing page-->
+                        <Button x:Name="editThisEventButton"
+                            Text="Edit"
+                            Clicked="OnEditEvent"
+                            IsVisible="False"
+                            Margin="0,5,0,5"/>
+                        <!--TE: Suggest the event be closed or close it-->
+                        <Button x:Name="SuggestCloseButton"
+                            Text="Suggest to Close"							
+                            Clicked="SuggestEventbeClosed"
+                            IsVisible="False"
+                            Margin="0,5,0,5"/>
+                    </StackLayout>
+
+                    <!--JA: Food tags carousel-->
+                    <controls:CarouselViewControl x:Name="foodTagsCarousel"
+                                          Orientation="Horizontal"
+                                          HeightRequest="50"
+                                          HorizontalOptions="FillAndExpand"
+                                          ShowArrows="True"
+                                          Margin="0,5,0,5">
+                        <controls:CarouselViewControl.ItemTemplate>
+                            <DataTemplate>
+
+                                <!--JA: Displays the event tags on a carousel
+								JA: TODO Show three tags per slide, currently shows one per slide-->
+                                <Label Text="{Binding Tag_Name}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                            
+                             
+                            </DataTemplate>
+                        </controls:CarouselViewControl.ItemTemplate>
+                    </controls:CarouselViewControl>
+
+                    <!--JA: Images carousel-->
+                    <controls:CarouselViewControl x:Name="imagesCarousel"
+                                          Orientation="Horizontal"
+                                          HeightRequest="75"
+                                          HorizontalOptions="FillAndExpand"
+                                          ShowArrows="True"
+                                          Margin="0,5,0,5">
+                        <controls:CarouselViewControl.ItemTemplate>
+                            <DataTemplate>
+
+                                <!--JA: Displays the event images on a carousel-->
+                                <!--JA: TODO Enlarge images on press-->
+                                <Image Source="{Binding image}"/>
+
+                            </DataTemplate>
+                        </controls:CarouselViewControl.ItemTemplate>
+                    </controls:CarouselViewControl>
+
+
+
+                <!-- JW: loading spinner; keep this as the last element until I sort out overlaying it over the other elements -->
+                <ActivityIndicator x:Name="loadingSpinner" IsRunning="false" />
+            </StackLayout>
+        </ScrollView>
+      </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FoodFinder.App">
+    <Application.Resources>
+        <!-- Application resource dictionary -->
+        <ResourceDictionary>
+            <!-- Sets the color for NavigationPages -->
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="#007bff"/>
+                <Setter Property="BarTextColor" Value="White"/>
+
+            </Style>
+
+            <!-- Sets the color for a TabbedPage -->
+           
+
+            <On Platform="Android" x:Key="tabbedPageStyle">
+                <Style TargetType="TabbedPage">
+                    <Setter Property="BarBackgroundColor" Value="#007bff"/>
+                    <Setter Property="BarTextColor" Value="White"/>
+                </Style>
+            </On>
+
+            <!-- Sets the Icon for the Location Tab-->
+
+            <On Platform ="iOS" x:Key="locationIconSetter">
+                <Style TargetType="ContentPage">
+                    <Setter Property="Icon" Value="mapTabIcon.png"/>
+                </Style>
+            </On>
+            <!-- Sets the Icon for the Account Tab-->
+            <On Platform="iOS" x:Key="tabbedAccountStyle">
+                <Style TargetType="ContentPage">
+                    <Setter Property="Icon" Value="preferencesTabIcon.png"/>
+                </Style>
+            </On>
+
+            <!-- Sets the color and size for buttons -->
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="#007bff"/>
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="FontSize" Value="Small"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            </Style>
+
+            <!-- Sets the size for Labels -->
+            <Style TargetType="Label">
+                <Setter Property="FontSize" Value="Medium"/>
+            </Style>
+
+            <!-- Sets the size for Entries -->
+            <Style TargetType="Entry">
+                <Setter Property="FontSize" Value="Medium"/>
+            </Style>
+
+            <!-- Sets the color for ActivityIndicators -->
+            <Style TargetType="ActivityIndicator">
+                <Setter Property="Color" Value="Red"/>
+            </Style>
+            
+            <!-- Sets the properties of Tool tips as labels-->
+            <Style x:Key="toolTipLabel" TargetType="Label">
+                <Setter Property="TextColor" Value="Blue"/>
+                <Setter Property="FontSize" Value="Micro"/>
+                <Setter Property="IsVisible" Value="False"/>
+                <Setter Property="Margin" Value="0"/>
+            </Style>
+
+            <!-- Sets the properties of Tool tips as labels-->
+            <Style x:Key="toolTipStack" TargetType="StackLayout">
+                <Setter Property="IsVisible" Value="False"/>
+            </Style>
+
+            <Style x:Key="scollViewMargin" TargetType="ScrollView">
+                <Setter Property="Padding" Value="0"/>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

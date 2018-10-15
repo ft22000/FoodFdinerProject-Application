@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FoodFinder.Views.FeedbackPage"
+             Title="Feedback">
+	<ContentPage.Padding>
+		<OnPlatform x:TypeArguments="Thickness">
+			<On Platform="iOS" Value="20, 40, 20, 20"/>
+			<On Platform="Android" Value="15"/>
+		</OnPlatform>
+	</ContentPage.Padding>
+	
+	<!--TE: I copied the BecomeEventOrganiserPage as Tim suggested for the feedback page.-->
+
+	<!--Kim: Become an Event Organiser Page-->
+	<ContentPage.Content>
+        <ScrollView Style="{StaticResource scollViewMargin}">
+			<StackLayout>
+				<!--JA: Page description-->
+				<Label Text="Please leave any feedback or suggestions for improvement regarding this mobile application and it's functionality. (255 Character Limit)"
+                   HorizontalOptions="Center"/>
+
+				<!--Kim: Request reason field-->
+				<Editor x:Name="feedbackMessageField"
+                    VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand"
+                    BackgroundColor="WhiteSmoke"
+                    MaxLength="255"
+                    />				
+
+				<!--Kim: Send request button-->
+				<Button x:Name="submitFeedbackButton"
+                    Text="Submit Feedback"
+					Clicked="SubmitFeedback"
+                />
+
+				<!-- JW: loading spinner; keep this as the last element until I sort out overlaying it over the other elements -->
+				<ActivityIndicator x:Name="loadingSpinner" IsRunning="false"/>
+			</StackLayout>
+		</ScrollView>
+	</ContentPage.Content>
+</ContentPage>

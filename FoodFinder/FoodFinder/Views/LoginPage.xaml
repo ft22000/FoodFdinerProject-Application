@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FoodFinder.Views.LoginPage">
+
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="15"/>
+            <On Platform="Android" Value="15"/>
+        </OnPlatform>
+    </ContentPage.Padding>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout x:Name="InitialPage">
+                <ScrollView>
+                    <StackLayout VerticalOptions="CenterAndExpand"
+                                 HorizontalOptions="FillAndExpand">
+                        <!--EDH: UTAS logo-->
+                        <Image x:Name="utasImage"
+                               Source="utasLogo.png"
+                               IsVisible="True"
+                               Aspect="AspectFit"
+                               HeightRequest="160"/>
+
+                        <!--EDH: SUS TEAM Moto-->
+                        <Label Text="Simple Actions Towards Sustainability"
+                               Margin="10"
+                               HorizontalOptions="CenterAndExpand"
+                               FontSize="Small"/>
+
+                        <!--EDH: FoodFinder name-->
+                        <Label Text="Food Finder"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="Start"
+                               FontAttributes="Bold"
+                               FontSize="Large"/>
+
+                        <!--EDH: Email input-->
+                        <Entry x:Name="email"
+                               Placeholder="Email"
+                               Keyboard="Email"
+                               HorizontalTextAlignment="Start"/>
+
+                        <StackLayout Orientation="Horizontal" Margin="0" Padding="0">
+                            <!--EDH: Password input-->
+                            <Entry x:Name="password"
+                                   Placeholder="Password"
+                                   IsPassword="True"
+                                   HorizontalTextAlignment="Start"
+                                   HorizontalOptions="FillAndExpand"
+                                   />
+                            <!--TODO: Set Style Sheet Enty-->
+                            <Image x:Name="ShowHidePasswordLabel"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center"
+                                   WidthRequest="20"
+                                   Source="hide.png">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ShowHidePassword"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </StackLayout>
+
+                        <!--EDH: Button to log in-->
+                        <Button x:Name="loginButton"
+                                Text="Login"
+                                Clicked="ClickedLogin"/>
+
+                        <!--EDH: Signup button-->
+                        <Label x:Name="signupLink"
+                               Text="Not a member? Click Here to Join!"
+                               HorizontalOptions="CenterAndExpand"
+                               Margin="0, 15, 0, 0"
+                               TextColor="Blue"
+                               FontSize="Small">
+                            <!-- JW: calls the "ClickedSignup" function when the label is pressed -->
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ClickedSignup"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                        <Label x:Name="forgotPassword"
+                               Text="Forgot your password?"
+                               HorizontalOptions="CenterAndExpand"
+                               Margin="0, 15, 0, 0"
+                               TextColor="Blue"
+                               FontSize="Small">
+                            <!-- JW: calls the "ClickedSignup" function when the label is pressed -->
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ForgotPasswordRecogniser"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                        <!-- JW: loading spinner; keep this as the last element until I sort out overlaying it over the other elements -->
+                        <ActivityIndicator x:Name="loadingSpinner" IsRunning="false" />
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+
+            <!--Kim: Verification popup window-->
+            <StackLayout IsVisible="False" x:Name="verificationCode">
+
+                <Label Text="Verification Code" HorizontalOptions="Center"/>
+                <Label Text="An email has been sent containing your verification code. Please enter it below to verify your account."/>
+                <Entry x:Name="Code" HorizontalOptions="FillAndExpand" />
+
+                <Button x:Name="verifyButton" Text="Verify Code" Clicked="CheckVerification" />
+                <Button x:Name="resendButton" Text="Re-send verification code" Clicked="SendVerificationCode" />
+                <Button Text="Close" Clicked="PopupReturn"/>
+
+                <ActivityIndicator x:Name="loadingSpinnerVerification" IsRunning="false" />
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

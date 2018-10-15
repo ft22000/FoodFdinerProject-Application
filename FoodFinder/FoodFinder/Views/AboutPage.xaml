@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FoodFinder.Views.AboutPage"
+             Title="About">
+
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="15"/>
+            <On Platform="Android" Value="15"/>
+        </OnPlatform>
+    </ContentPage.Padding>
+
+    <ContentPage.Content>
+        <ScrollView Style="{StaticResource scollViewMargin}">
+            <StackLayout>
+                <!--JA: About information-->
+                <Label x:Name="aboutText"
+                    VerticalOptions="FillAndExpand"
+                    TextColor="Black"
+                    FontSize="Medium"/>
+
+                <!--EDH: Further reading and contact details-->
+                <StackLayout Margin="0" Padding="0">
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="If you want to know more about sustainability at UTAS, go to " ForegroundColor="Black" FontSize="Medium"/>
+                                <Span Text="http://www.utas.edu.au/sustainability/" ForegroundColor="Blue" FontSize="Medium"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="SustainabilityWebsiteLink"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="or contact the Sustainability Team at " ForegroundColor="Black" FontSize="Medium"/>
+                                <Span Text="sustainability.utas@utas.edu.au" ForegroundColor="Blue" FontSize="Medium"/>
+                                <Span Text="." ForegroundColor="Black" FontSize="Medium"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="SustainabilityEmailLink"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

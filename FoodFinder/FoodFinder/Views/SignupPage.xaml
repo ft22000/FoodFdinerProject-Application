@@ -1,0 +1,806 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FoodFinder.Views.SignupPage"
+             Title="Signup">
+
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="15"/>
+            <On Platform="Android" Value="15"/>
+        </OnPlatform>
+    </ContentPage.Padding>
+
+    <!--Help label with gesture recogniser-->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Default" Priority="0" Icon="question.png" Clicked="ShowHideTips" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout x:Name="signUpLayout" Orientation="Vertical">
+                <!--JH: The image of the UTAS Logo-->
+                <Image x:Name="utasLogo"
+                                Source="logoSideBySide.png"/>
+
+                <!--JH: Sustainability Team's Moto-->
+                <Label x:Name="motto"
+                                Text="Simple Actions Towards Sustainability"
+                                HorizontalOptions="CenterAndExpand"
+                                FontSize="Small"/>
+
+                <ScrollView Style="{StaticResource scollViewMargin}">
+                    <StackLayout>
+                        <!--JH: A field for the user to submit their email-->
+                        <Entry x:Name="email"
+                                Placeholder="Email*"
+                                Keyboard="Email"/>
+
+                        <Label x:Name="emailToolTip"
+                               Text="Please enter your University of Tasmania email. This is a compulsory field."
+                               Style="{StaticResource toolTipLabel}"/>
+
+                        <StackLayout x:Name="showPasswordLayout" Orientation="Horizontal" Margin="0" Padding="0">
+                            <!--EDH: Password input-->
+                            <Entry x:Name="password"
+                                    Placeholder="Password*"
+                                    IsPassword="True"
+                                    HorizontalTextAlignment="LEft"
+                                    TextChanged="PasswordUpdated"
+                                    HorizontalOptions="FillAndExpand"/>
+                            <!--TODO: Set Style Sheet Enty-->
+                            <Image HorizontalOptions="End"
+                                    VerticalOptions="Center"
+                                    x:Name="ShowHidePasswordLabel"
+                                    Source="hide.png"
+                                    WidthRequest="20">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ShowHidePassword"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </StackLayout>
+
+                        <!--TE: Password strength meter-->
+                        <Frame x:Name="StrengthMeterContainer"
+                               CornerRadius="5"
+							   HasShadow="False"
+                               BackgroundColor="Gray"
+                               HorizontalOptions="FillAndExpand"
+                               Padding="0">
+                            <BoxView x:Name="StrengthIndicator"
+                                     HorizontalOptions="StartAndExpand"
+                                     BackgroundColor="Red"
+                                     HeightRequest="5"
+                                     WidthRequest="0"/>
+                        </Frame>
+
+                        <StackLayout x:Name="adviceLayout" Orientation="Horizontal">
+                            <Label x:Name="adviceLabel"
+                                   HorizontalOptions="CenterAndExpand"
+                                   FontSize="Small">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span x:Name="ConditionsAdvice" ForegroundColor="Blue"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </StackLayout>
+
+                        <StackLayout x:Name="passwordToolTip" Style="{StaticResource toolTipStack}">
+                            <Label Text="Your password needs to meet the following requirements:"
+                                   Style="{StaticResource toolTipLabel}"
+                                   IsVisible="True"/>
+                            <Label Text="&#x2022; At least 8 or more characters long."
+                                   Style="{StaticResource toolTipLabel}"
+                                   IsVisible="True"/>
+                            <Label Text="&#x2022; At least 1 must be an uppercase letter."
+                                   Style="{StaticResource toolTipLabel}"
+                                   IsVisible="True"/>
+                            <Label Text="&#x2022; At least 1 must be a lowercase letter."
+                                   Style="{StaticResource toolTipLabel}"
+                                   IsVisible="True"/>
+                            <Label Text="&#x2022; At least 1 must be a number."
+                                   Style="{StaticResource toolTipLabel}"
+                                   IsVisible="True"/>
+                        </StackLayout>
+
+                        <!--JH: A field for the user to submit their password again for confirmation-->
+                        <Entry x:Name="passwordConfirm"
+                               Placeholder="Confirm Password*"
+                               IsPassword="True"/>
+
+                        <!--JH: The Primary Campus of the user-->
+                        <Picker x:Name="primaryCampus"
+                                Title="Choose a primary campus*"
+                                ItemDisplayBinding="{Binding Campus_Name}"/>
+
+                        <Label x:Name="primaryCampusToolTip"
+                                   Text="Your primary campus is where your map position will default to, and receive notifications from. This is a compulsory field."
+                                   Style="{StaticResource toolTipLabel}"/>
+
+                        <StackLayout x:Name="eulaLinkLayout" Orientation="Horizontal">
+                            <!--JA: Link that display the EULA when tapped-->
+                            <Label x:Name="agreementLink"
+                                    HorizontalOptions="StartAndExpand"
+                                    FontSize="Small">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="I agree to the "/>
+                                        <Span Text="EULA" ForegroundColor="Blue"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnEULASelect"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+
+                            <!--JH: A switch to confirm that the user agrees to the EULA.
+                                note: a slider of which it was allows for a scale, not a yes/no answer-->
+                            <Switch x:Name="switchEULAcheck"
+                                                IsEnabled="False"/>
+                        </StackLayout>
+
+                        <!--JH: A button to check the entries supplied by the user are valid for a new profile-->
+                        <Button x:Name="buttonSignup"
+                                        Text="Sign Up"
+                                        Clicked="ClickedSignup"/>
+
+                        <!-- JW: loading spinner; keep this as the last element until I sort out overlaying it over the other elements -->
+                        <ActivityIndicator x:Name="loadingSpinner" IsRunning="false" />
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+ 
+            <!--Kim: Verification popup window-->
+            <StackLayout IsVisible="False" x:Name="verificationCode">
+
+                <Label Text="Verification Code" HorizontalOptions="Center"/>
+                <Label Text="An email has been sent containing your verification code. Please enter it below to verify your account."/>
+                <Entry x:Name="Code" HorizontalOptions="FillAndExpand" Placeholder="Verification Code"/>
+
+                <Button x:Name="verifyButton" Text="Verify Code" Clicked="CheckVerification" />
+                <Button Text="Close" Clicked="PopupReturn"/>
+
+                <ActivityIndicator x:Name="loadingSpinnerVerification" IsRunning="false" />
+            </StackLayout>
+
+            <!-- EULA layout -->
+            <StackLayout x:Name="EULAView" IsVisible="False">
+                <ScrollView>
+                    <StackLayout>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="This end user licence agreement (referred to throughout this document as the "/>
+                                    <Span Text="&quot;EULA&quot;" FontAttributes="Bold"/>
+                                    <Span Text=") is between you and the University of Tasmania, trading as 'Air Rater' (defined in clause 1.1 as "/>
+                                    <Span Text=" we, us" FontAttributes="Bold"/>
+                                    <Span Text="). Your use of the Application is governed by the EULA. It is a legal agreement between you and us."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="In consideration for Registering as a user of the Application you confirm acceptance of the EULA. The date you Register will be the effective date of the EULA (defined in clause 1.1 as the &quot;"/>
+                                    <Span Text="Effective Date" FontAttributes="Bold"/>
+                                    <Span Text="&quot;). You may not make any use of the Application unless you have accepted the EULA. At a minimum, your agreement with us will always include the EULA."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="1   DEFINITIONS" FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="In the EULA, unless specified otherwise:"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Application " FontAttributes="Bold"/>
+                                    <Span Text="means (a) the online, web-based applications, platforms or websites provided by us from time to time via the Apple App Store, the Android Play Store, and other designated platforms or websites that are described to you from time to time; and (b) any offline software made available to you by us, including but not limited to the software branded as FooFinder or any other trade mark or business name designated by us. The Application include, but are not limited to: (a) any services that are arranged by you direct with us; and (b) any associated offline components, but excluding Third Party Applications."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Automated Access " FontAttributes="Bold"/>
+                                    <Span Text="means use of a process, script, webcrawler, software or other methodology that: (a) permits a user that is not a human user to access the Application as a user; or (b) monitors any activity in connection with the Application; and (c) regardless of whether we are aware of the nature of such access."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Confidential Information " FontAttributes="Bold"/>
+                                    <Span Text="has the meaning set out in clause 7.1 (Definition of Confidential Information)."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Consequential Loss " FontAttributes="Bold"/>
+                                    <Span Text="means any consequential or indirect loss suffered or incurred under or in connection with this EULA (whether arising in contract or tort (including negligence), under an indemnity or otherwise) including but not limited to loss of anticipated savings, loss of profits, loss of data (including the costs of reconstruction of a loss of data), costs of internal resources or third parties utilized to address any breach by a party, additional amounts paid for alternative or replacement items, the costs of reworking defective work, and the costs of remedial measures such as engaging extra staff or purchasing additional equipment to address problems."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Effective Date " FontAttributes="Bold"/>
+                                    <Span Text="means the date you Register for the Application."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Harmful Code " FontAttributes="Bold"/>
+                                    <Span Text="means viruses, worms, time bombs, Trojan horses and other harmful software, files, scripts, agents or programs."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Intellectual Property Rights " FontAttributes="Bold"/>
+                                    <Span Text="means intellectual property rights conferred on a party or recognised at Law in any territory throughout the world including any rights associated with copyright, trademark, business name, patent, innovation concept, semiconductor, formula, trade secret, method, circuit layout, invention and any other results of intellectual activity in any field of industry or endeavour, and includes (a) any right to require that Confidential Information be kept confidential, and (b) any right to use an Intellectual Property Right owned by a third party where the terms of that right of use or licence permit a use of that Intellectual Property Right as contemplated under the EULA."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Law " FontAttributes="Bold"/>
+                                    <Span Text="means, with reference to any applicable jurisdiction, any statute, regulation, bylaw or a provision of a statute, regulation, or bylaw and includes, without limitation, any statutory rule, or ruling by a statutory body."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Open Source Software Component " FontAttributes="Bold"/>
+                                    <Span Text="means any software which may have been utilised within or in conjunction with the Application and which is otherwise freely available to the general public under licence terms which are different to this document."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Register " FontAttributes="Bold"/>
+                                    <Span Text="means the act of registration as a user of the Application (including by means of Automated Access - whether in breach of this EULA or otherwise) and includes the act of registration on behalf of that person as a user, or the web-based confirmation of an act of acceptance of an invitation by any person to become a user. Without limiting clause 2.3(d) (Interpretation – General), in this EULA, "/>
+                                    <Span Text="Registered, Registering " FontAttributes="Bold"/>
+                                    <Span Text="and other similar grammatical variances of this word have the corresponding meaning of this concept in the context they are used."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Third Party Applications " FontAttributes="Bold"/>
+                                    <Span Text="means online, web-based applications and offline software products that are: (a) provided by third parties; (b) interoperate with the Application; and (c) may be either separate or con-joined with the Application, whether or not they are identified to you by us as applications that are provided by third parties."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="we, us " FontAttributes="Bold"/>
+                                    <Span Text="means the University of Tasmania trading as &quot;FoodFinder&quot;"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="you " FontAttributes="Bold"/>
+                                    <Span Text="means any party who is Registered.   Without prejudice to the requirements of our Registration policies, when: (a) there is more than one party involved in that instance of Registration, those parties are jointly and severally liable to us; (b) you are an individual, the expression includes your personal representatives, employees and agents, and if you are an employee, the expression includes your employer; (c) the Registered party is a corporation, the expression includes the employees, agents and successors of the corporation; (d) the Registered party is a partnership, the expression includes the partnership as it is constituted at the date of its Registration and each of its members and also the successors of the partnership whether comprising the same of a different name and each of the members of the partnership or its successors as it may be constituted from time to time; and (e) the Registered party is or becomes a trustee (whether or not that fact is disclosed to the us) the expression includes the party in its personal capacity as well as its capacity as a trustee.   Without limiting clause 2.3(d) (Interpretation – General), in this EULA, "/>
+                                    <Span Text="your, yours " FontAttributes="Bold"/>
+                                    <Span Text="and other grammatical variances of these terms in the EULA have the corresponding meaning of this concept in the context they are used."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="your Data " FontAttributes="Bold"/>
+                                    <Span Text="means all electronic data or information submitted by you making use of the Application, whether that data or information is submitted by you or data that is intended by you to be processed, stored (temporarily or otherwise) or syndicated using the Application."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="2   INTERPRETATION" FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="2.1 References – People and Parties. " FontAttributes="Bold"/>
+                                    <Span Text="In this document a reference to: (a) one gender includes the others; (b) the singular includes the plural and the plural includes the singular; (c) a person includes a body corporate; and (d) a party includes the party's executors, administrators, successors and permitted assigns."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="2.2 References – Statutes and currency. " FontAttributes="Bold"/>
+                                    <Span Text="n this document a reference to a Law includes: (a) that Law as amended or re-enacted from time to time; (b) a statute, regulation or provision enacted in replacement of that Law; and (c) another regulation or other statutory instrument made or issued under that Law. A reference to money is to Australian Dollars, unless otherwise stated."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="2.3 Interpretation – General. " FontAttributes="Bold"/>
+                                    <Span Text="In this document: (a) &quot;including&quot; and similar expressions are not words of limitation; (b) a reference to a clause or schedule is a reference to a clause of or a schedule to the EULA; (c) a reference to an agreement or document (including, without limitation, a reference to the EULA) is to the agreement or document as amended, novated or replaced; (d) where a word or expression is given a particular meaning, other parts of speech and grammatical forms of that word or expression have a corresponding meaning; (e) headings are for convenience only and do not form part of this document or affect its interpretation; (f) a provision of the EULA must not be construed to the disadvantage of a party merely because that party was responsible for the preparation of the EULA; and (g) all references to time are to Australian Eastern Daylight Time."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="3 Services" FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="3.1 Provision of the Application. " FontAttributes="Bold"/>
+                                    <Span Text="We will make the Application available to you under the terms of the EULA. You acknowledge that the terms of this EULA do not constitute a sale of any aspect of the Application to you. You agree that your use of the Application is not contingent on the delivery of any future functionality or features, or dependent on any oral or written public comments made by us regarding future functionality or features. You may access the Application on any device that has the relevant capabilities and any minimum system requirements that have been specified by us from time to time. However, you acknowledge that we do not warrant that any of the Application will be available by way of access from any particular device."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="3.2 Future Access Subscriptions. " FontAttributes="Bold"/>
+                                    <Span Text="Initial access to the Application is available to you free of charge. However, you acknowledge that we reserve the right to change this in the future. In some instances, the Application (or various components of the Application) could be made available to you for purchase as a subscription, or on a fixed price purchase arrangement."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="3.3 Licence. " FontAttributes="Bold"/>
+                                    <Span Text="We grant to you a personal, non-assignable, and non-exclusive license to use the Application in accordance with the EULA for the duration of the EULA. This license is granted for the sole purpose of enabling you to enjoy the features of the Application in the manner contemplated by the EULA and is not capable of sublicense without our prior written consent."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="3.4 Open Source Software Components. " FontAttributes="Bold"/>
+                                    <Span Text="The restrictions which this document places on the use of the Application do not in any way limit your access to, use of or obligations in respect of any Open Source Software Components."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="3.5 Term. " FontAttributes="Bold"/>
+                                    <Span Text="The term of this EULA will continue until it is terminated in one of the ways provided for in clause 9 (Termination)."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="4   USE OF THE SERVICES" FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="4.1 Your Responsibilities. " FontAttributes="Bold"/>
+                                    <Span Text="You are entirely responsible for: (a) your access to the Application; (b) your use of the Application; (c) your compliance with the EULA; (d) the appropriateness, accuracy, quality, and legal integrity of your Data; and (e) the means by which you acquired your Data. You acknowledge that you may be required to have and maintain an internet or data connection in order to access the Application. We will not be liable to you in any circumstances where our attempted failsafe procedures do not activate as we have designed or intended. You are entirely responsible for and liable for your actions taken based on information provided by the Application."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="4.2 Prevention of Misuse. " FontAttributes="Bold"/>
+                                    <Span Text="You must: (a) use commercially reasonable efforts to prevent unauthorized access to or use of the Application, and notify us promptly of any such unauthorized access or use; (b) not seek to circumvent the our methods intended to control access to the Application; (c) not operate or develop patches, software or applied programming interfaces that are intended to augment or alter the Application in a manner that is not intended or not authorized by us; and (d) use the Application only in accordance with applicable Laws."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="4.3 Use of the Application. " FontAttributes="Bold"/>
+                                    <Span Text="You must not: (a) make the Application available to anyone else; (b) sell, resell, rent or lease access to the Application; (c) use the Application to store or transmit infringing, libelous, or otherwise unlawful or tortious material, or to store or transmit material in violation of third party privacy rights; (d) use the Application to store or transmit Harmful Code; (e) interfere with or disrupt the integrity or performance of the Application or any Third Party Applications; or (f) attempt to gain unauthorized access to the Application or our related systems or networks. You may not access the Application to monitor their availability, performance or functionality unless the reason for your doing so is to assess the Application for your own reference in circumstances where the details of your assessment are not to be published or provided to a third party."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="4.4 Usage Limitations. " FontAttributes="Bold"/>
+                                    <Span Text="The Application may be subject to usage limitations, such as, for example, limits: (a) on storage space; and (b) on the number of calls you are permitted to make against our application programming interfaces. You must comply with any usage limitations imposed by us."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="4.5 Automated Access. " FontAttributes="Bold"/>
+                                    <Span Text="All Automated Access is also subject to the EULA. No automated software or process may legally access the Application until the person who is responsible for the Automated Access has accepted the EULA. As such, any attempt to obtain Automated Access will be bound by the EULA. If you are responsible for any Automated Access, you must also comply with any directives we may make in respect of the Application using a Robots Exclusion Protocol, robots.txt file, Robots Exclusion Standard or any other directive concerning Automated Access prepared by us from time to time."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="4.6 Access Information. " FontAttributes="Bold"/>
+                                    <Span Text="You must keep your passwords and any confidential user identification that you use to access the Application secure. You are solely responsible to us for all activities that occur in respect of your user account for the Application, and if you become aware of unauthorized use of your user account for the Application, you agree that you will notify us immediately."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="4.7 Software Versions and Application. " FontAttributes="Bold"/>
+                                    <Span Text="You acknowledge that: (a) there are multiple instances of software supporting and underpinning the Application; (b) we will make that software available to you from time to time to assist your use of the Application; (c) that we will update that software from time to time. As a condition of your use of the Application, you must use the latest versions of any of our software made available to you for that use. You also consent to us updating the Application automatically without notifying you."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="4.8 Restricted Purposes. " FontAttributes="Bold"/>
+                                    <Span Text="ou must not use the Application for any purpose that is restricted by us in our sole discretion. This includes but is not limited to purposes that: (a) promote harmful activities or substances in breach of any Law; (b) infringe a third party's Intellectual Property Rights, or violate a third party's rights of publicity or privacy; and (c) are fraudulent, false, misleading or deceptive."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="5   THIRD PARTY ARRANGEMENTS" FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="5.1 Acquisition of Third Party Products and Services. "  FontAttributes="Bold"/>
+                                    <Span Text="You acknowledge that: (a) if you utilise any other products or services produced by other parties, including but not limited to Third Party Applications, including implementation, customization and other consulting services, and any exchange of data between you and any third party provider, is solely between you and the applicable third party provider; and (b) we do not warrant or support any Third Party Applications or any other product or service that are not a part of the Application, whether or not they are designated as &quot;certified&quot; or otherwise."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="5.2 Third Party Applications and your Data. " FontAttributes="Bold"/>
+                                    <Span Text="If you install or enable Third Party Applications for use with the Application, you acknowledge that we may allow providers of those Third Party Applications to access your Data as required for the interoperation of those Third Party Applications with the Application. We are not responsible for any disclosure, modification or deletion of your Data resulting from this type of access by Third Party Application providers."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="5.3 Third Party Suppliers. " FontAttributes="Bold"/>
+                                    <Span Text="You acknowledge that in order for us to provide the Application to users, we source data from other providers ("/>
+                                    <Span Text="Other Providers" FontAttributes="Bold"/>
+                                    <Span Text="). This means that the Other Providers are beneficiaries to your obligations under this EULA, and how you use the Application may affect the Other Providers and our arrangements with them. By Registering, you agree that (a) the Other Providers may use this EULA to enforce your obligations and to assert their rights as beneficiaries; and (b) that we may supply information about your obligations and use of the Application to the Other Providers for the sole purpose of enabling them to enforce those obligations where appropriate."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="6   PROPRIETARY RIGHTS" FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="6.1 Reservation of Rights. " FontAttributes="Bold"/>
+                                    <Span Text="Subject to the rights granted to you in the EULA, we reserve all other rights, title and interest in and to the Application, including all Intellectual Property Rights in the Application. You acknowledge no Intellectual Property Rights are granted to you in the EULA other than the usage rights for the Application that are expressly described in the EULA."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="6.2 Restrictions. " FontAttributes="Bold"/>
+                                    <Span Text="You must not: (a) permit any third party to access the Application except as permitted in the EULA; (b) copy, modify, create derivate works of, reverse engineer, decompile or otherwise attempt to extract the source code of the software in respect of the Application; (c) copy, frame or mirror any part or content of the Application, other than copying or framing for your own personal reference; (d) reverse engineer any aspect of the Application; (e) access the Application in order to build a competitive product or service; (f) copy any features, functions or graphics of the Application; or (g) act in a manner that is otherwise inconsistent with our Intellectual Property Rights."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="6.3 Ownership of your Data. " FontAttributes="Bold"/>
+                                    <Span Text="Subject to the licenses you have granted to us in respect of your Data in the EULA, we acknowledge that you own all rights, title, and interest in and to all of your Data."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="6.4 Other Intellectual Property Rights. " FontAttributes="Bold"/>
+                                    <Span Text="During your use of the Application, you must not utilize content in a way that infringes the Intellectual Property Rights of third parties. You must obtain the consent of the owner of the relevant Intellectual Property Rights in respect of the content you intend to use. You acknowledge that we are not liable to you or to any third party for your use of content in breach of this clause 6.4."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <!--Link for EULA -->
+                        <StackLayout Margin="0" Padding="0">
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="6.5 Information Rights and Publicity. " FontAttributes="Bold"/>
+
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Subject to the terms of our privacy policy (located at "/>
+                                        <Span Text="www.utas.edu.au/privacy" ForegroundColor="Blue"/>
+                                        <Span Text=", or any other reference point that we may provide to you from time to time) "/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="EULALink"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text=", we and our related parties may retain and use, information collected about you during the course of your use of the Application. We will not share information in respect of your activities with any third parties unless we: (a) have your consent; (b) are permitted to do so under relevant Laws relating to privacy; or (c) provide such information in certain limited circumstances to third parties to carry out tasks on our behalf (e.g., invoicing or data storage) with strict restrictions that prevent the data from being used or shared except as directed by us. When this is done, we must ensure it is subject to agreements that oblige those parties to process such information only on our instructions and in compliance with the EULA and appropriate confidentiality and security measures. By registering as a user of the Application, you also consent to the transfer of your personal information to a country outside of the country you reside in, provided that the transfer is conducted in accordance with applicable Laws."/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </StackLayout>
+
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="6.6 Trade Marks. " FontAttributes="Bold"/>
+                                    <Span Text="You acknowledge that you may not use our trade marks, logos, domain names or brands to promote you or your services (or in juxtaposition to them) except: (a) in any instance where we have otherwise authorized you to do so; or (b) any instance where our trade marks, logos, domain names or brands are to be used in association with functions that permit the Application to interoperate with other services."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="6.7 Suggestions. " FontAttributes="Bold"/>
+                                    <Span Text="You grant to us a royalty-free, worldwide, transferable, sub-licensable, irrevocable and perpetual license to use or incorporate into the Application any suggestions, enhancement requests, recommendations or other feedback provided by you relating to the operation of the Application."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="7   CONFIDENTIALITY" FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="7.1 Definition of Confidential Information. " FontAttributes="Bold"/>
+                                    <Span Text="n this clause 7, "/>
+                                    <Span Text="Confidential Information " FontAttributes="Bold"/>
+                                    <Span Text="means all information disclosed by a party ("/>
+                                    <Span Text="Disclosing Party" FontAttributes="Bold"/>
+                                    <Span Text=") to the other party (Receiving Party), whether orally or in writing, that is designated as confidential or that reasonably should be understood to be confidential given the nature of the information and the circumstances of disclosure. Your Confidential Information includes your personal information. Our Confidential Information includes that information concerning aspects of the Application not ordinarily available to the public. Confidential Information also includes the terms and conditions of the EULA, as well as business and marketing plans, technology and technical information, product plans and designs, and business processes disclosed by any party. However, Confidential Information does not include any information that: (a) is or becomes generally known to the public without breach of any obligation owed to the Disclosing Party; (b) was known to the Receiving Party prior to its disclosure by the Disclosing Party without breach of any obligation owed to the Disclosing Party; (c) is received from a third party without breach of any obligation owed to the Disclosing Party; or (d) was independently developed by the Receiving Party."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="7.2 Protection of Confidential Information. " FontAttributes="Bold"/>
+                                    <Span Text="Unless authorized by the Disclosing Party in writing; (a) the Receiving Party must not disclose or use any Confidential Information of the Disclosing Party for any purpose outside the scope of the EULA; and (b) the Receiving Party must limit access to Confidential Information of the Disclosing Party to those of its employees, contractors and agents who need the access for purposes that are consistent with the EULA and who have signed confidentiality agreements satisfactory to both parties."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="7.3 Protection of your personal information. " FontAttributes="Bold"/>
+                                    <Span Text="We will maintain appropriate administrative, physical, and technical safeguards for protection of the security, confidentiality, and integrity of your personal information in accordance with our privacy policies as modified by us from time to time. We will not: (a) modify your personal information; (b) disclose your personal information, except where this EULA permits or requires that disclosure; or (c) access your personal information except to provide the Application or prevent or address service or technical problems, or at your request in connection with customer support matters."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="7.4 Compelled Disclosure. " FontAttributes="Bold"/>
+                                    <Span Text="The Receiving Party may disclose Confidential Information of the Disclosing Party if it is compelled by Law to make the disclosure, provided the Receiving Party gives the Disclosing Party prior notice of the scope of the compelled disclosure (to the extent legally permitted) and reasonable assistance, at the Disclosing Party's cost, if the Disclosing Party wishes to contest the disclosure. If the Receiving Party is compelled by Law to disclose the Disclosing Party's Confidential Information as part of a civil proceeding to which the Disclosing Party is a party, and the Disclosing Party is not contesting the disclosure, the Disclosing Party will reimburse the Receiving Party for its reasonable cost of compiling and providing secure access to such Confidential Information."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="8   ACKNOWLEDGEMENTS, WARRANTIES AND DISCLAIMERS" FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="8.1 Acknowledgement. " FontAttributes="Bold"/>
+                                    <Span Text="You acknowledge that (a) the Application consist of a collection of agricultural data combined with algorithms designed to predict environmental conditions; (b) that the Application is intended to assist providing users with information only; and (c) that unless agreed otherwise we do not accept liability for any particular outcomes affecting you as a result of the information provided through the Application."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="8.2 Mutual Warranties. " FontAttributes="Bold"/>
+                                    <Span Text="Each party represents and warrants that: (a) it has the legal power and capacity to enter into the EULA; and (b) it will not transmit to the other party any Harmful Code."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="8.3 Disclaimer. " FontAttributes="Bold"/>
+                                    <Span Text="Except as required by any Law or as set out in the EULA, neither party makes any other warranties of any kind, and each party specifically disclaims all implied warranties."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="9   TERMINATION" FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="9.1 Termination by us. " FontAttributes="Bold"/>
+                                    <Span Text="We may terminate the EULA at any time in writing if: (a) you have breached any provision of the EULA; (b) you have acted in a way that indicates you does not intend to comply with a provision of the EULA; (c) we are required to terminate the EULA by Law, or the operation of the Application becomes unlawful; (d) we determine that the provision of the Application is no longer profitable or viable."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="9.2 Termination by you. " FontAttributes="Bold"/>
+                                    <Span Text="You may terminate the EULA without notice to us simply by: (a) deregistering as a user of the Application; and (b) ceasing to use all aspects of the Application (including those that interoperate with Third Party Applications). If you terminate in this way, you will be required to pay any subscription fee payable to us up until the end of the nearest payment period that is applicable to your use of the Application. If you resume use of the Application in any way, the EULA will apply to that resumed use, whether you are Registered or not."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="9.3 Commercial Effect of Termination. " FontAttributes="Bold"/>
+                                    <Span Text="Any termination by you does not secure any right to a refund or credit."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="9.4 Survival of Terms. " FontAttributes="Bold"/>
+                                    <Span Text="Any termination by either party will not affect any rights, obligations liabilities or licenses that are either expressed in the EULA to be continuous or are intended to continue indefinitely by implication."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="10  GENERAL PROVISIONS" FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="10.1 Export Compliance. " FontAttributes="Bold"/>
+                                    <Span Text="You must comply with the export Laws and regulations of any relevant jurisdictions in using the Application. In particular: (a) you warrant that you are not named on any government list of persons or entities prohibited from receiving exports; and (b) you must not access or use the Application in violation of any export embargo, prohibition or restriction."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="10.2 Relationship of the Parties. " FontAttributes="Bold"/>
+                                    <Span Text="The parties are independent contractors. This EULA does not create a partnership, franchise, joint venture, agency, fiduciary or employment relationship between the parties."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="10.3 Third Party Beneficiaries. " FontAttributes="Bold"/>
+                                    <Span Text="You acknowledge that: (a) we have entered into licensing arrangements to enable the provision of the Application; and (b) the licensors of the enabling data or technologies could be third party beneficiaries to your obligations under the EULA."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="10.4 Waiver and Cumulative Remedies." FontAttributes="Bold"/>
+                                    <Span Text="No failure or delay by either party in exercising any right under the EULA constitutes a waiver of that right. Other than as expressly stated in the EULA, the remedies set out in the EULA are in addition to, and not exclusive of, any other remedies of a party under any Law."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="10.5 Severability. " FontAttributes="Bold"/>
+                                    <Span Text="If any provision of the EULA is held by a court of competent jurisdiction to be contrary to any Law, the provision must be modified by the court and interpreted so as best to accomplish the objectives of the original provision to the fullest extent permitted by Law, and the remaining provisions of the EULA will remain in effect."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="10.6 Assignment. " FontAttributes="Bold"/>
+                                    <Span Text="You cannot assign your rights or obligations under the EULA without our prior written consent. We can novate or assign our rights or obligations under the EULA without restriction."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="10.7 Liability. " FontAttributes="Bold"/>
+                                    <Span Text="Subject to any Law applying to the EULA that expressly prevents this provision, our aggregate liability from any one claim by you (whether the claim arises under this EULA, or pursuant to any action in tort, negligence or otherwise) will not exceed the larger of: (a) the amount paid or payable by you to us for the Application; or (b) the cost of re-supplying the Application to you. Subject to applicable Law, in no event will we be liable to you for Consequential Losses incurred as a result of a breach of this EULA."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="10.8 Amendments. " FontAttributes="Bold"/>
+                                    <Span Text="We may amend the EULA from time to time by either notifying you using the Application or providing details of the amendments on our website. We will act reasonably in making any amendments."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="10.9 Governing Law and Disputes. " FontAttributes="Bold"/>
+                                    <Span Text="The EULA is governed by the Laws of Tasmania and the Commonwealth of Australia and disputes must be resolved in the non-exclusive courts of that jurisdiction. You agree that you will not be involved in an action as a class member in a class action and that all disputes must be pursued in your own name only. Each of the parties waive respective rights to seek or be involved in any class action under this EULA or concerning any aspect of the Application."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label>
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="10.10 Entire Agreement. " FontAttributes="Bold"/>
+                                    <Span Text="The EULA constitutes the entire agreement between the parties and supersedes all prior understandings and agreements concerning its subject matter."/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                </ScrollView>
+
+                <Button x:Name="AgreeEULAButton"
+                        Clicked="AgreeToEULA"
+                        Text="Agree"
+                        VerticalOptions="Center"/>
+
+                <Button x:Name="CloseEULAButton"
+                        Clicked="CloseEULA"
+                        Text="Close"
+                        VerticalOptions="Center"/>
+                
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

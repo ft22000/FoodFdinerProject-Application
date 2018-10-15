@@ -1,0 +1,41 @@
+﻿using Xamarin.Forms;
+using FoodFinder.Views;
+namespace FoodFinder
+/*Author: Tim Anderson
+ * Date 15/5/18
+ * Date Modified: -
+ * Modified By: -
+ * 
+ * App.xaml.cs is used to init the application and the opening pages.
+ */
+{
+	public partial class App : Application
+	{
+		public App ()
+		{
+			InitializeComponent();
+
+<<<<<<< HEAD
+            MainPage = new FoodFinder.Views.MainPage();
+=======
+			MainPage = new FoodFinder.LoginPage();
+            MainPage = new NavigationPage(new LoginPage());
+>>>>>>> FoodFinderApp/Alternate-Signup/login
+        }
+
+        protected override void OnStart()
+        {
+            // Handle when your app starts
+        }
+
+        protected override void OnSleep()
+        {
+            // Handle when your app sleeps
+        }
+
+		protected override void OnResume ()
+		{
+			// Handle when your app resumes
+		}
+	}
+}

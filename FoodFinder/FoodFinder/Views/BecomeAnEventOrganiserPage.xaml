@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FoodFinder.Views.BecomeAnEventOrganiserPage"
+             Title="Become an Event Organiser">
+
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="15"/>
+            <On Platform="Android" Value="15"/>
+        </OnPlatform>
+    </ContentPage.Padding>
+    
+    <!--Kim: Become an Event Organiser Page-->
+    <ContentPage.Content>
+        <ScrollView Style="{StaticResource scollViewMargin}">
+            <StackLayout HorizontalOptions="FillAndExpand">
+                <!--JA: Page description-->
+                <Label Text="Event Organisers create events that have leftover food. Through these events, Event Organisers can help distribute these leftovers to students. Tell us how you can help here.  (255 Character Limit)"
+                   HorizontalOptions="FillAndExpand"/>
+
+                <!--Kim: Request reason field-->
+                <Editor x:Name="requestReasonField"
+                    VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand"
+                    BackgroundColor="WhiteSmoke"
+                    MaxLength="255"
+                    />
+
+                <!--Kim: Send request button-->
+                <Button x:Name="BecomeEventOrganiserButton"
+                    Text="Request Permission"
+                    Clicked="RequestPermission"
+                        HorizontalOptions="FillAndExpand"/>
+
+                <!-- JW: loading spinner; keep this as the last element until I sort out overlaying it over the other elements -->
+                <ActivityIndicator x:Name="loadingSpinner" IsRunning="false"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

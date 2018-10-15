@@ -1,0 +1,164 @@
+﻿using System;
+using System.Collections.Generic;
+using Android.Content;
+using Android.Gms.Maps;
+using Android.Gms.Maps.Model;
+using Android.Widget;
+using FoodFinder.Models;
+using FoodFinder;
+using FoodFinder.Droid;
+using Xamarin.Forms;
+using Xamarin.Forms.Maps;
+using Xamarin.Forms.Maps.Android;
+
+[assembly: ExportRenderer(typeof(CustomMap), typeof(CustomMapRenderer))]
+namespace FoodFinder.Droid
+{    
+    public class CustomMapRenderer : MapRenderer, GoogleMap.IInfoWindowAdapter
+    {
+        List<CustomPin> customPins;
+
+        public CustomMapRenderer(Context context) : base(context)
+        {
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnElementChanged(Xamarin.Forms.Platform.Android.ElementChangedEventArgs<Map> e)
+        {
+            base.OnElementChanged(e);
+
+            if(e.OldElement != null)
+            {
+                NativeMap.InfoWindowClick -= OnInfoWindowClick;
+            }
+            
+            if(e.NewElement != null)
+            {
+                var formsMaps = (CustomMap)e.NewElement;
+                customPins = formsMaps.CustomPins;
+                Control.GetMapAsync(this);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="map"></param>
+        protected override void OnMapReady(GoogleMap map)
+        {
+            base.OnMapReady(map);
+            NativeMap.InfoWindowClick += OnInfoWindowClick;
+            NativeMap.SetInfoWindowAdapter(this);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pin"></param>
+        /// <returns></returns>
+        protected override MarkerOptions CreateMarker(Pin pin)
+        {
+            var marker = new MarkerOptions();
+            marker.SetPosition(new LatLng(pin.Position.Latitude, pin.Position.Longitude));
+            marker.SetTitle(pin.Label);
+            marker.SetSnippet(pin.Address);
+            marker.SetIcon(BitmapDescriptorFactory.FromResource(Resource.Drawable.mapIcon));
+            return marker;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void OnInfoWindowClick(object sender, GoogleMap.InfoWindowClickEventArgs e)
+        {
+            var customPin = GetCustomPin(e.Marker);
+            if(customPin == null)
+            {
+                throw new Exception("Custom Pin Not Found");
+            }
+            if (!string.IsNullOrWhiteSpace(customPin.Url))
+            {
+                var url = Android.Net.Uri.Parse(customPin.Url);
+                var intent = new Intent(Intent.ActionView, url);
+                intent.AddFlags(ActivityFlags.NewTask);
+                Android.App.Application.Context.StartActivity(intent);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="marker"></param>
+        /// <returns></returns>
+        public Android.Views.View GetInfoContents(Marker marker)
+        {
+            var inflater = Android.App.Application.Context.GetSystemService(Context.LayoutInflaterService) as Android.Views.LayoutInflater;
+            if(inflater != null)
+            {
+                Android.Views.View view;
+                var customPin = GetCustomPin(marker);
+                if(customPin == null)
+                {
+                    throw new Exception("Custom Pin Not Found");
+                }
+                if(customPin.Id.ToString() == "Xamarin")
+                {
+                    view = inflater.Inflate(Resource.Layout.XamarinMapInfoWindow, null);
+
+                }
+                else
+                {
+                    view = inflater.Inflate(Resource.Layout.XamarinMapInfoWindow, null);
+                }
+
+                var infoTitle = view.FindViewById<TextView>(Resource.Id.InfoWindowTitle);
+                var infoSubtitle = view.FindViewById<TextView>(Resource.Id.InfoWindowSubtitle);
+                if (infoTitle != null)
+                {
+                    infoTitle.Text = marker.Title;
+                }
+                if (infoSubtitle != null)
+                {
+                    infoSubtitle.Text = marker.Snippet;
+                }
+
+                return view;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="marker"></param>
+        /// <returns></returns>
+        public Android.Views.View GetInfoWindow(Marker marker)
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="annotation"></param>
+        /// <returns></returns>
+        CustomPin GetCustomPin(Marker annotation)
+        {
+            var position = new Position(annotation.Position.Latitude, annotation.Position.Longitude);
+            foreach (var pin in customPins)
+            {
+                if (pin.Position == position)
+                {
+                    return pin;
+                }
+            }
+            return null;
+        }
+    }
+}

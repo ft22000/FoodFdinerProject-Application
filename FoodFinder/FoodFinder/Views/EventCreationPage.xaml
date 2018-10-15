@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FoodFinder.Views.EventCreationPage"
+             Title="Create Event">
+
+    <!-- JW: padding for each respective device -->
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <On Platform="iOS" Value="15"/>
+            <On Platform="Android" Value="15"/>
+        </OnPlatform>
+    </ContentPage.Padding>
+
+    <!--Help label with gesture recogniser-->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Default" Priority="0" Icon="question.png" Clicked="ShowHideTips" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout x:Name="InitialPage">
+                <ScrollView Style="{StaticResource scollViewMargin}">
+                    <StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <!--Left stack-->
+                            <StackLayout HorizontalOptions="Start" MinimumWidthRequest="70">
+                                <!--Label for event Name-->
+                                <Label Text="Name*"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="CenterAndExpand"
+                                   FontSize="Medium"/>
+
+                                <!-- JW: text label for the start time picker -->
+                                <Label Text="Start"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="CenterAndExpand"
+                                   FontSize="Medium"/>
+
+                                <!-- JW: text label for the timer -->
+                                <Label Text="Duration*"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="CenterAndExpand"
+                                   FontSize="Medium"/>
+
+                                <!--Label for Campus selector-->
+                                <Label Text="Campus"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="CenterAndExpand"
+                                   FontSize="Medium"/>
+
+                                <!--Label for Building selector-->
+                                <Label Text="Building*"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="CenterAndExpand"
+                                   FontSize="Medium"/>
+                                
+                                <!--Label for Room selector-->
+                                <Label Text="Room*"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="CenterAndExpand"
+                                   FontSize="Medium"/>
+
+                            </StackLayout>
+
+                            <!--Right stack-->
+                            <StackLayout HorizontalOptions="FillAndExpand">
+                                <!-- JW: event name text input -->
+                                <Entry x:Name="name"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="FillAndExpand"
+                                   HorizontalTextAlignment="Start" 
+                                   MaxLength="44"    />
+
+                                <Label x:Name="eventNameToolTip"
+                                       Text="The name of the event that all users will see. This is a compulsory field. "
+                                       Style="{StaticResource toolTipLabel}"
+                                       HorizontalOptions="Start"/>
+
+                                <!-- JW: the time picker itself -->
+                                <TimePicker x:Name="startTime"
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="CenterAndExpand"/>
+
+                                <Label x:Name="timePickerToolTip"
+                                       Text="The time that the event will start."
+                                       Style="{StaticResource toolTipLabel}"
+                                       HorizontalOptions="Start"/>
+
+                                <!--EDH: picker for event duration-->
+                                <Picker x:Name="DurationPicker"
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="CenterAndExpand"/>
+
+                                <Label x:Name="durationPickerToolTip"
+                                       Text="The length of time that the event will go for (Maximum of 4 hours). This is a compulsory field."
+                                       Style="{StaticResource toolTipLabel}"
+                                       HorizontalOptions="Start"/>
+
+                                <!-- JW: campus picker storing entries from an observablecollection containing campus information -->
+                                <Picker x:Name="campus"
+                                    HorizontalOptions="FillAndExpand"
+                                    ItemDisplayBinding="{Binding Campus_Name}"/>
+
+                                <Label x:Name="campusPickerToolTip"
+                                       Text="The campus your event will be on."
+                                       Style="{StaticResource toolTipLabel}"
+                                       HorizontalOptions="Start"/>
+
+                                <!-- JW: event Building text input -->
+                                <Entry x:Name="Building"
+                                   VerticalOptions="Center"
+                                   HorizontalTextAlignment="Start" />
+
+                                <Label x:Name="buildingToolTip"
+                                       Text="The building that your event will be held. This is a compulsory field."
+                                       Style="{StaticResource toolTipLabel}"
+                                       HorizontalOptions="Start"/>
+                                
+                                <!-- JW: event Room text input -->
+                                <Entry x:Name="Room"
+                                   VerticalOptions="Center"
+                                   HorizontalTextAlignment="Start"
+                                   MaxLength="44"    />
+
+                                <Label x:Name="roomToolTip"
+                                       Text="The name of the room/or area that your event will be held at. This is a compulsory field."
+                                       Style="{StaticResource toolTipLabel}"
+                                       HorizontalOptions="Start"/>
+                            </StackLayout>
+                        </StackLayout>
+
+                        <!--Choose Location button-->
+                        <Button  Text="Choose Location"
+                             Clicked="SelectEventLocationOnMap"/>
+
+                        <Label x:Name="locationToolTip"
+                               Text="Select a map location of your event, place a marker that best represents where your event will be held."
+                               Style="{StaticResource toolTipLabel}"/>
+
+                        <!--EDH: Button to open tag picker custom popup-->
+                        <Button x:Name="TagSelectButton"
+                            Clicked="TagSelection"
+                            Text="Select Food Tags"/>
+
+                        <Label x:Name="tagSelectToolTip"
+                               Text="Select appropriate tags that best describe the foods that will be available from your event."
+                               Style="{StaticResource toolTipLabel}"/>
+
+                        <!-- JW: an image that calls a function when pressed (https://stackoverflow.com/questions/37294834/how-to-fill-a-button-with-an-image-in-xamarin-forms https://docs.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/gestures/tap#Using_Xaml) -->
+                        <Image Source="camera.png"
+                           WidthRequest="50"
+                           HeightRequest="50"
+                           HorizontalOptions="CenterAndExpand">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnTapGestureRecognizerTapped"  />
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <Label x:Name="cameraToolTip"
+                               Text="Add photos to showcase the food at your event."
+                               Style="{StaticResource toolTipLabel}"/>
+
+                        <!-- JW: button to be used to create the event -->
+                        <Button x:Name="CreateEventButton"
+                            Text="Create Event"
+                            Clicked="ClickedCreateEvent"/>
+
+                        <!-- JW: loading spinner; keep this as the last element until I sort out overlaying it over the other elements -->
+                        <ActivityIndicator x:Name="loadingSpinner"
+                                       IsRunning="false" />
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+
+            <!--EDH Custom popup for selecting the event tags-->
+            <StackLayout x:Name="TagSelectPage" IsVisible="False" VerticalOptions="StartAndExpand">
+                <ListView x:Name="selectTags" Footer="">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal">
+                                    <StackLayout HorizontalOptions="StartAndExpand"
+                                                     VerticalOptions="Center">
+                                        <Label Text="{Binding Tag_Name}"/>
+                                    </StackLayout>
+                                    <StackLayout HorizontalOptions="End"
+                                                     VerticalOptions="Center">
+                                        <Switch Toggled="OnToggledItem"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                
+                <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                    <Button Text="Confirm Selection"
+                            Clicked="CloseTagPicker"/>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

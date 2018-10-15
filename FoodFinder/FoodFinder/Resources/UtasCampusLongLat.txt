@@ -1,0 +1,16 @@
+	Newnham -41.401271, 147.122441
+	Inveresk -41.427181, 147.140399
+	Launceston General Hospital -41.446742, 147.141676
+	Beauty Point -41.159199, 146.823166
+	Cradle Coast Campus 
+	West Park -41.057821, 145.880070
+	Rural Clinical School -41.047084, 145.881536
+	Rozelle -33.870031, 151.156748
+	Darlinghurst -33.880266, 151.221872
+	Sandy Bay -42.904146, 147.324923
+	IMAS Salamanca -42.881990, 147.336477
+	Medical Science Precinct -42.878831, 147.330035
+Hobart Clinical School -42.880981, 147.329868
+Tasmanian College of the Arts -42.881969, 147.336419
+Conservatorium of Music -42.886888, 147.328349
+IMAS Taroona -42.949424, 147.354108
